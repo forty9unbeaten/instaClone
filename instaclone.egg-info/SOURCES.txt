@@ -1,0 +1,10 @@
+setup.py
+instaclone/__init__.py
+instaclone/asgi.py
+instaclone/settings.py
+instaclone/urls.py
+instaclone/wsgi.py
+instaclone.egg-info/PKG-INFO
+instaclone.egg-info/SOURCES.txt
+instaclone.egg-info/dependency_links.txt
+instaclone.egg-info/top_level.txt
