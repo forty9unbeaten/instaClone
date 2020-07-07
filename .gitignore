@@ -1,3 +1,5 @@
 .venv
 *.lock
 *pycache*
+.env
+db.*
