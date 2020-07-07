@@ -2,3 +2,4 @@
 *.lock
 *pycache*
 .env
+db.*
