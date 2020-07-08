@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "instaclone"
+version = "0.1.0"
+description = "Instagram Clone"
+authors = ["Avelyno Koumaka", "Chelsea White", "Rob Spears"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+django = "^3.0.8"
+django-environ = "^0.4.5"
+pillow = "^7.2.0"
+
+[tool.poetry.dev-dependencies]
+flake8 = "^3.8.3"
+autopep8 = "^1.5.3"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
