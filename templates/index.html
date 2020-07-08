@@ -1,3 +1,4 @@
+
 {% if request.user.is_authenticated %}
 <p>You are logged in</p>
 <a href="{% url 'logout'%}">Logout</a>
@@ -5,3 +6,5 @@
 <a href="{% url 'login' %}">Login</a>
 <p>Need an account? <a href="{% url 'signup'%}">Sign up for one</a>
 {% endif %}
+<a class="nav-link" href="{% url 'profilePage' id=user.id %}">PROFILE</a>
+
