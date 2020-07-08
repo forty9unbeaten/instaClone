@@ -1,0 +1,4 @@
+{% if request.user.is_authenticated %}
+<p>You're logged in</p>
+{% else %}
+<a href="{% url 'login' %}">You need to log in</a>
