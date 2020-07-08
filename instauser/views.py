@@ -1,14 +1,14 @@
 from django.shortcuts import render, reverse, HttpResponseRedirect
 from instauser.models import InstaUser
 from django.contrib.auth import login, authenticate
-from comment.models import Comment
-from django.views.generic import View
+from instaPost.models import Post
+
 
 # Create your views here.
 
 def profilePage(request, id):
-    comments = Comment.objects.filter(author=id)
-    countcomments = comments.count()
+    posts = Post.objects.filter(user=id)
+    countposts = posts.count()
     user = InstaUser.objects.get(id=id)
     followers = user.following.all()
     countfollowers = followers.count()
@@ -21,8 +21,8 @@ def profilePage(request, id):
         return render(
                 request, 
                 'profilePage.html', {
-                'comments': comments, 
-                'countcomments': countcomments,
+                'posts': posts, 
+                'countposts': countposts,
                 'user': user, 
                 'countfollowers': countfollowers,
                 'myfollowers': myfollowers,
@@ -31,8 +31,8 @@ def profilePage(request, id):
     return render(
                 request, 
                 'profilePage.html', {
-                'comments': comments, 
-                'countcomments': countcomments,
+                'posts': posts, 
+                'countposts': countposts,
                 'user': user,
                 'countfollowers': countfollowers,
                 })
