@@ -2,6 +2,7 @@ from django.shortcuts import render, reverse, HttpResponseRedirect, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.views import View
 from .forms import LoginForm, SignupForm
+from instauser.models import InstaUser
 
 # Create your views here.
 def index(request):
@@ -11,7 +12,7 @@ def index(request):
 class LoginView(View):
     form = LoginForm
     initial = {'key': 'value'}
-    template_name = 'generic-form.html'
+    template_name = 'generic_form.html'
 
     def get(self, request):
         return render(request, self.template_name, {'form': self.form})
@@ -37,7 +38,7 @@ def logoutview(request):
 class SignupFormView(View):
     form = SignupForm
     initial = {'key': 'value'}
-    template_name='generic-form.html'
+    template_name='generic_form.html'
 
     def get(self, request):
         return render(request, self.template_name, {'form': self.form})
@@ -57,4 +58,4 @@ class SignupFormView(View):
             user.save()
             login(request, user)
             return HttpResponseRedirect(reverse('home'))
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {'form': self.form})
