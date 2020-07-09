@@ -14,3 +14,5 @@ class HomepageView(View):
             {
                 'posts': posts
             })
+        
+
