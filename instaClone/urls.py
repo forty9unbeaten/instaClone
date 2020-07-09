@@ -19,12 +19,14 @@ from django.conf.urls.static import static
 from instaClone import settings
 from authentication.urls import urlpatterns as authurls
 from instauser.urls import urlpatterns as userurls
+from instaPost.urls import url_patterns as post_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 ]
 urlpatterns += authurls
 urlpatterns += userurls
+urlpatterns += post_urls
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
