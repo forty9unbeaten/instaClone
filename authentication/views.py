@@ -3,11 +3,12 @@ from django.contrib.auth import login, logout, authenticate
 from django.views import View
 from .forms import LoginForm, SignupForm
 from instauser.models import InstaUser
+from instaPost.models import Post
 
 # Create your views here.
 def index(request):
-    return render(request, 'index.html')
-
+    data = Post.objects.all()
+    return render(request, 'index.html', {'data': data})
 
 class LoginView(View):
     form = LoginForm

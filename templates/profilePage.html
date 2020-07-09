@@ -1,0 +1,17 @@
+<a href="/"><h3>InstaClone</h3></a>
+<h3 >{{ user.username }}</h3>
+<p><h5>posts: {{countposts}}</h5></p>
+<p><h5>Following: {{countfollowers}}</h5></p>
+{% if is_following %}
+  <a href="{% url 'unfollow' id=user.id%}">UNFOLLOW</a>
+{% else %}
+  <a href="{% url 'follow' id=user.id%}">FOLLOW</a>
+{% endif %}
+
+
+
+
+
+
+
+
