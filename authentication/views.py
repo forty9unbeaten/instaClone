@@ -5,10 +5,7 @@ from .forms import LoginForm, SignupForm
 from instauser.models import InstaUser
 from instaPost.models import Post
 
-# Create your views here.
-def index(request):
-    data = Post.objects.all()
-    return render(request, 'index.html', {'data': data})
+# Create your views here
 
 class LoginView(View):
     form = LoginForm
