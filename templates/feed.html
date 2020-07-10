@@ -37,7 +37,16 @@
                 ♥ ({{ post.likes }})
             </button>
         </form>
+        <!-- Delete Button -->
+        {% if request.user == post.user %}
+        <button 
+            class='btn'>
+            <a href={% url 'deletePost' id=post.id %}>🗑️</a>
+        </button>
+        {% endif %}
         <hr width='350px'>
+
+        
 
         <!-- Comments -->
         <div

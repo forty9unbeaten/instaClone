@@ -17,6 +17,7 @@ class HomepageView(View):
                 'posts': posts
             })
 
+
 @login_required(login_url='/login/')
 def newpost(request):
     if request.method == 'POST':
@@ -30,3 +31,9 @@ def newpost(request):
     form = NewPostForm()
     return render(request, 'postUploadForm.html', {'form': form})
 
+@login_required
+def deletepost(request, id):
+    post = Post.objects.get(id=id)
+    if request.user == post.user:
+        post.delete()
+        return HttpResponseRedirect(reverse('home'))
