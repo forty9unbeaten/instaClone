@@ -29,3 +29,4 @@ def newpost(request):
     
     form = NewPostForm()
     return render(request, 'postUploadForm.html', {'form': form})
+
