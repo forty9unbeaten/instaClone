@@ -1,13 +1,7 @@
 {% if request.user.is_authenticated %}
-<p>You are logged in</p>
-<a href="{% url 'logout'%}">Logout</a>
-{% else %}
-<a href="{% url 'login' %}">Login</a>
-<p>
-    Need an account? <a href="{% url 'signup'%}">Sign up for one</a>
-    {% endif %}
-    <a class="nav-link" href="{% url 'profilePage' id=user.id %}">My Profile</a>
-</p>
+<a class ="nav-link" href="{% url 'logout'%}">Logout</a>
+<a class="nav-link" href="{% url 'profilePage' id=user.id %}">My Profile</a>
+<a class="nav-link" href="{% url 'newPost' %}">Add a new post</a>
 
 {% for post in posts %}
     {# container for posts #}
@@ -69,3 +63,9 @@
         <div>NEW COMMENT LINK HERE</div>
     </div>
 {% endfor %}
+{% else %}
+    <a href="{% url 'login' %}">Login</a>
+    <p>Need an account?
+        <a class-"nav-link" href="{% url 'signup'%}">Sign up for one</a>
+    </p>
+{% endif %}

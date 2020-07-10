@@ -1,6 +1,7 @@
 from django import forms
+from .models import Post
 
-
-class PostForm(forms.Form):
-    picture = forms.ImageField()
-    caption = forms.CharField(max_length=140, widget=forms.Textarea)
+class NewPostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['picture', 'caption']
