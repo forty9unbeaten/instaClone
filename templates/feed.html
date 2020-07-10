@@ -34,7 +34,10 @@
                 type='submit'
                 class='btn'
             >
-                ♥ ({{ post.likes }})
+            <!-- is there a way for the page not to reload everytime you like a post? -->
+            <!-- Also should we limit likes to 1 per User on each post?-->
+            <!-- Also need a way to unlike -->
+                <a href="like/{{post.id}}/">♥</a>({{ post.likes }})
             </button>
         </form>
         <hr width='350px'>

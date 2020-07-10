@@ -30,3 +30,8 @@ def newpost(request):
     form = NewPostForm()
     return render(request, 'postUploadForm.html', {'form': form})
 
+def likepost(request, post_id):
+    post = Post.objects.get(id=post_id)
+    post.likes += 1
+    post.save()
+    return HttpResponseRedirect(reverse('home'))
