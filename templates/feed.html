@@ -29,14 +29,30 @@
         <div>{{ post.caption }}</div>
 
         <!-- Like Button -->
-        <form action='' method='POST'>
-            <button 
-                type='submit'
-                class='btn'
-            >
-                ♥ ({{ post.likes }})
-            </button>
-        </form>
+        {% if request.user in post.likes.get_queryset %}
+            <!-- User has liked post -->
+            <form action='unlike/{{ post.id }}' method="POST">
+                {% csrf_token %}
+                <button
+                    type='submit'
+                    class='btn'
+                    style='color: red;'
+                >
+                    ♥ ({{ post.likes.count }})
+                </button>
+            </form>
+        {% else %}
+            <!-- User has not liked post -->
+            <form action='/like/{{ post.id }}' method='POST'>
+                {% csrf_token %}
+                <button 
+                    type='submit'
+                    class='btn'
+                >
+                    ♥ ({{ post.likes.count }})
+                </button>
+            </form>
+        {% endif %}
         <hr width='350px'>
 
         <!-- Comments -->
