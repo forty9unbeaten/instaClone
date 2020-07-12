@@ -20,6 +20,7 @@ from instaClone import settings
 from authentication.urls import urlpatterns as authurls
 from instauser.urls import urlpatterns as userurls
 from instaPost.urls import url_patterns as post_urls
+from comment.urls import url_patterns as comment_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,6 +28,7 @@ urlpatterns = [
 urlpatterns += authurls
 urlpatterns += userurls
 urlpatterns += post_urls
+urlpatterns += comment_urls
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
