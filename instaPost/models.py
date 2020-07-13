@@ -11,7 +11,8 @@ class Post(models.Model):
     user = models.ForeignKey(InstaUser,
                              on_delete=models.CASCADE)
     comments = models.ManyToManyField(Comment, blank=True)
-    likes = models.IntegerField(default=0)
+    likes = models.ManyToManyField(
+        InstaUser, blank=True, related_name='post_likes')
 
     def __str__(self):
         return self.caption
