@@ -17,3 +17,18 @@ def add_comment(request, post_id):
         new_comment.save()
         post.comments.add(new_comment)
         return HttpResponseRedirect(reverse('home'))
+
+
+@login_required(login_url='/login/')
+def delete_comment(request, comment_id):
+    pass
+
+
+@login_required(login_url='/login/')
+def delete_all(request, post_id):
+    post = Post.objects.get(id=post_id)
+    user_id = post.user.id
+    if request.user == post.user:
+        post.comments.get_queryset().delete()
+        return HttpResponseRedirect(reverse('profilePage', args=(user_id,)))
+    return HttpResponseRedirect(reverse('profilePage', args=(user_id,)))
