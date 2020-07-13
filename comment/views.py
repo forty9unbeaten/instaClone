@@ -21,7 +21,12 @@ def add_comment(request, post_id):
 
 @login_required(login_url='/login/')
 def delete_comment(request, comment_id):
-    pass
+    comment = Comment.objects.get(id=comment_id)
+    user_id = comment.author.id
+    if request.user == comment.author:
+        comment.delete()
+        return HttpResponseRedirect(reverse('home'))
+    return HttpResponseRedirect(reverse('home'))
 
 
 @login_required(login_url='/login/')

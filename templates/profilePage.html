@@ -105,7 +105,7 @@
                                         </div>
                                         {% if request.user == post.user or request.user == comment.author %}
                                         <div>
-                                          <a href="">🗑️</a>
+                                          <a href={% url 'delete_comment' comment_id=comment.id%}>🗑️</a>
                                         </div>
                                         {% endif %}
                                     </div>
