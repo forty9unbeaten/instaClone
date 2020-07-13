@@ -45,3 +45,8 @@ def unlike_post(request, post_id):
         post = Post.objects.get(id=post_id)
         post.likes.remove(request.user)
         return HttpResponseRedirect(reverse('home'))
+
+def delete_post(request, id):
+    post = Post.objects.get(id=id)
+    post.delete()
+    return HttpResponseRedirect(reverse('home'))
