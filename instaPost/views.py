@@ -1,7 +1,10 @@
 from django.shortcuts import render, HttpResponseRedirect, reverse
 from django.views.generic import View
+from django.views.generic.list import ListView
+from django.views.generic.detail import SingleObjectMixin
 from django.contrib.auth.decorators import login_required
 from .models import Post
+from instauser.models import InstaUser
 from .forms import NewPostForm
 
 # Create your views here.
@@ -9,7 +12,7 @@ from .forms import NewPostForm
 
 class HomepageView(View):
     def get(self, request):
-        posts = Post.objects.all()
+        posts = Post.objects.filter(archived=False)
         return render(
             request,
             'index.html',
@@ -31,6 +34,7 @@ def newpost(request):
     form = NewPostForm()
     return render(request, 'postUploadForm.html', {'form': form})
 
+
 @login_required(login_url='/login/')
 def like_post(request, post_id):
     if request.method == 'POST':
@@ -46,7 +50,33 @@ def unlike_post(request, post_id):
         post.likes.remove(request.user)
         return HttpResponseRedirect(reverse('home'))
 
+
 def delete_post(request, id):
     post = Post.objects.get(id=id)
     post.delete()
     return HttpResponseRedirect(reverse('home'))
+
+
+@login_required(login_url='/login/')
+def archive_post(request, id):
+    post = Post.objects.get(id=id)
+    post.archived = True
+    post.save()
+    return HttpResponseRedirect(reverse('profilePage', args=(post.user.id,)))
+
+
+@login_required(login_url='/login/')
+def unarchive_post(request, id):
+    post = Post.objects.get(id=id)
+    post.archived = False
+    post.save()
+    return HttpResponseRedirect(reverse('home'))
+
+
+@login_required(login_url='/login/')
+def archived_posts(request, id):
+    posts = Post.objects.filter(user_id=id).filter(archived=True)
+    return render(request, 'index.html', {'posts': posts})
+    
+
+    

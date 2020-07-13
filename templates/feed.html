@@ -53,6 +53,14 @@
                 </button>
             </form>
         {% endif %}
+        {% if post.archived == True %}
+            <a
+                class='btn'
+                href={% url 'unarchive' id=post.id %}
+            >
+                Unarchive post
+            </a>
+        {% endif %}
         <hr width='350px'>
 
         

@@ -7,7 +7,7 @@ from authentication.forms import SignupForm
 # Create your views here.
 
 def profilePage(request, id):
-    posts = Post.objects.filter(user=id)
+    posts = Post.objects.filter(user=id).filter(archived=False)
     countposts = posts.count()
     user = InstaUser.objects.get(id=id)
     followers = user.following.all()
