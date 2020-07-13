@@ -2,7 +2,7 @@ from django.shortcuts import render, reverse, HttpResponseRedirect
 from instauser.models import InstaUser
 from django.contrib.auth import login, authenticate
 from instaPost.models import Post
-
+from authentication.forms import SignupForm
 
 # Create your views here.
 
@@ -36,6 +36,26 @@ def profilePage(request, id):
                 'user': user,
                 'countfollowers': countfollowers,
                 })
+    
+def EditProfile(request, id):
+    user = InstaUser.objects.get(id=id)
+    if request.method == 'POST':
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            user.display_name = data['display_name']
+            user.bio = data['bio']
+            user.email = data['email']
+            user.save()
+        return HttpResponseRedirect(reverse('profilePage', args=(id,)))
+    form = SignupForm(initial={
+        'display_name': user.display_name,
+        'bio' : user.bio,
+        'email' : user.email,
+    })
+    return render(request, 'generic_form.html', {'form': form})    
+    
+    
     
 def follow(request, id):
     user = request.user
