@@ -11,7 +11,7 @@ def profilePage(request, id):
     countposts = posts.count()
     user = InstaUser.objects.get(id=id)
     followers = user.following.all()
-    countfollowers = followers.count()
+    countfollowers = followers.count() -1
     if request.user.is_authenticated:
         myfollowers = request.user.following.all()
         if user in myfollowers:
