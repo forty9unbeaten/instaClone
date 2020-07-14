@@ -13,6 +13,8 @@ from .forms import NewPostForm
 class HomepageView(View):
     def get(self, request):
         posts = Post.objects.filter(archived=False)
+        if request.user.is_authenticated:
+            posts = posts.filter(user__in=request.user.following.all())
         return render(
             request,
             'index.html',
@@ -20,6 +22,13 @@ class HomepageView(View):
                 'posts': posts
             })
 
+
+class DiscoverPageView(View):
+    def get(self, request):
+        posts = Post.objects.filter(archived=False)
+        if request.user.is_authenticated:
+            posts = posts.exclude(user__in=request.user.following.all())
+        return render(request, 'index.html', {'posts': posts})
 
 @login_required(login_url='/login/')
 def newpost(request):
