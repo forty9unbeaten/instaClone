@@ -27,19 +27,17 @@
 </div>
 
 
-<h4>Your Posts</h4>
+<h4 style='margin: 0 auto;'>Your Posts</h4>
 
     <div class="col-sm" >
       {# container for posts #}
     <div style='display: flex;
                 flex-direction: row;
-                
-                
                 width: 100%;
                 '>
 {% for post in posts %}
         {# picture#}
-    <a data-toggle="modal" data-target="#exampleModal"
+    <a data-toggle="modal" data-target="#exampleModal{{post.id}}"
             style="background-image: url('{{ post.picture.url }}'); 
             height: 400px; 
             width: 30%; 
@@ -56,13 +54,12 @@
         
         
             <!-- Modal/Post Detail -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="exampleModal{{post.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content" >
                   <div class="modal-body" >
-                    <div data-toggle="modal" data-target="#exampleModal">
+                   
                     <div class="card mb-3" >
-                    
                     <div class="row no-gutters">
                       <div class="col-md-8">
                         <img  style="background-image: url('{{ post.picture.url }}'); 
@@ -80,49 +77,68 @@
                                 <a class="btn" href={% url 'archive' id=post.id%}>Archive Post</a>
                             </div>
                             <div style='width: 100%; 
-                                        height: 150px; 
-                                        border: 1px solid lightgrey;
-                                        margin: 5px 0;
-                                        padding: 5px;
-                                        overflow: scroll;
-                                        border-radius: 10px;
-                                        box-sizing: border-box;'>
-                            <div>Comments
-                                <div>
-                                    {% if request.user == post.user %}
-                                      <a href={% url 'delete_all' post_id=post.id%}>Delete all comments</a>
-                                    {% endif %}
-                                </div>
-                            </div>
+                            height: 425px; 
+                            border: 1px solid lightgrey;
+                            overflow: scroll;
+                            border-radius: 10px;
+                            box-sizing: border-box;'>
                             
-                                {% for comment in post.comments.get_queryset %}
-                                    <br>
-                                    <div style='margin-left: 5px;'>
-                                        <a href={% url 'profilePage' id=comment.author.id %}>
-                                            {{ comment.author.username }}
-                                        </a>
-                                        <div>
-                                            {{ comment.comment }}
-                                        </div>
-                                        <div style='color: lightgrey;'>
-                                        {{ comment.time }}
-                                        </div>
+                    <div>Comments
+                        <div>
+                            {% if request.user == post.user %}
+                                <a href={% url 'delete_all' post_id=post.id%}>Delete all comments</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                            {% for comment in post.comments.get_queryset %}
+                            <br>
+                                <div style='margin-left: 5px;'>
+                                    <a href={% url 'profilePage' id=comment.author.id %}>{{ comment.author.username }}</a>
+                                        <div>{{ comment.comment }}</div>
+                                        <div style='color: lightgrey;'>{{ comment.time }}</div>
                                         {% if request.user == post.user or request.user == comment.author %}
-                                        <div>
-                                          <a href={% url 'delete_comment' comment_id=comment.id%}>🗑️</a>
-                                        </div>
+                                            <div><a href={% url 'delete_comment' comment_id=comment.id%}>🗑️</a></div>
                                         {% endif %}
-                                    </div>
-                                {% endfor %}
-                            </div>
-                            <div>NEW COMMENT LINK HERE</div>
+                                </div>
+                            {% endfor %}
+                </div>
+                <div style='box-sizing: border-box;
+                    width: 100%;
+                    display: flex;
+                    align-items: center;'
+
+        >
+            <form 
+                action='add_comment/{{ post.id }}' 
+                method='POST'
+                style='width: 100%;'
+            >
+                {% csrf_token %}
+                <input 
+                    placeholder='New Comment'
+                    name='comment'
+                    style='width: 85%;
+                            padding: 5px;
+                            border-radius: 5px;
+                            border: 1px solid lightgrey;'    
+                >
+                <button 
+                    class='btn btn-success'
+                    style='width: 13%;'
+                    type='submit'
+                >
+                    +
+                </button>
+            </form>
+        </div>
+
                           </div>
                       </div>
                     </div>
                     
                     </div>
                   </div>
-                </div>
+                
               </div>
             </div>
   {% endfor %}

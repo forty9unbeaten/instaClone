@@ -35,6 +35,7 @@ def newpost(request):
     return render(request, 'postUploadForm.html', {'form': form})
 
 
+    
 @login_required(login_url='/login/')
 def like_post(request, post_id):
     if request.method == 'POST':
