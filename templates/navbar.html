@@ -43,6 +43,12 @@
                 >
                     Logout
                 </a>
+                <a
+                    class='nav-item nav-link'
+                    href={% url 'archived_posts' id=request.user.id%}
+                >
+                    Archived Posts
+                </a>
             {% else %}
                 <a 
                     class='nav-item nav-link'

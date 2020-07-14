@@ -13,6 +13,7 @@ class Post(models.Model):
     comments = models.ManyToManyField(Comment, blank=True)
     likes = models.ManyToManyField(
         InstaUser, blank=True, related_name='post_likes')
+    archived = models.BooleanField(default=False)
 
     def __str__(self):
         return self.caption
