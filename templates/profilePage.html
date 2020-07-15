@@ -3,14 +3,11 @@
 <!-- User Profile Card -->
 <div class="card mb-3 mx-auto" style="max-width: 540px; margin: 30px;">
   <div class="row no-gutters">
-    <div class="col-md-4">
-      <img src="https://images.unsplash.com/photo-1520975764749-7397d17130a2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" class="card-img">
-    </div>
     <div class="col-md-8">
       <div class="card-body">
           <h5 class="card-title">{{ user.display_name }}</h5>
           <p class="card-text"><small class="text-muted">@{{ user.username }}</small></p>
-          <p class="card-text">{{countposts}} posts || Following {{countfollowers}}</p>
+          <p class="card-text">{{countposts}} Post(s) || {{countfollowers}} Follower(s)</p>
           <p class="card-text">{{ user.bio }}</p>
           <a class="btn btn-primary" a href="{% url 'edit' id=user.id %}">Edit</a></a>
           {% if  request.user != user %}
@@ -27,120 +24,167 @@
 </div>
 
 
-<h4 style='margin: 0 auto;'>Your Posts</h4>
+<h4 style='text-align: center;'>Posts</h4>
 
-    <div class="col-sm" >
-      {# container for posts #}
-    <div style='display: flex;
-                flex-direction: row;
-                width: 100%;
-                '>
-{% for post in posts %}
-        {# picture#}
-    <a data-toggle="modal" data-target="#exampleModal{{post.id}}"
-            style="background-image: url('{{ post.picture.url }}'); 
-            height: 400px; 
-            width: 30%; 
-            margin: 30px;
-            padding: 35px;
-            background-size: cover; 
-            background-position: center;
-            background-repeat: no-repeat;
-            border-radius: 10px;
-            box-shadow: 0 0 5px black;
-            border-radius: 10px;"
+<div class="col-sm" >
+  <!-- Container for Picture link -->
+  <div style='display: flex;
+              flex-direction: row;
+              width: 100%;
+              flex-wrap: wrap;'
+  >
+    {% for post in posts %}
+      <!-- Picture link for Modal -->
+      <a 
+        data-toggle="modal" 
+        data-target="#exampleModal{{post.id}}"
+        style="background-image: url('{{ post.picture.url }}'); 
+                height: 225px; 
+                width: 225px; 
+                margin: 30px;
+                padding: 35px;
+                background-size: cover; 
+                background-position: center;
+                background-repeat: no-repeat;
+                border-radius: 10px;
+                box-shadow: 0 0 5px black;
+                border-radius: 10px;"
         ></a>
-        {# username link, caption and Likes #}
-        
-        
-            <!-- Modal/Post Detail -->
-            <div class="modal fade" id="exampleModal{{post.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-                <div class="modal-content" >
-                  <div class="modal-body" >
-                   
-                    <div class="card mb-3" >
-                    <div class="row no-gutters">
-                      <div class="col-md-8">
-                        <img  style="background-image: url('{{ post.picture.url }}'); 
-                                          height: 600px; 
-                                          width: 100%; 
-                                          background-size: cover; 
-                                          background-position: left;
-                                          background-repeat: no-repeat;
-                                          " class="card-img">
-                      </div>
-                          <div class="col-md-4">
-                            <div class="card-body">
-                                <p class="card-title"><strong>{{ user.display_name }}</strong><class="card-text"><br/>{{post.caption}}</p>
-                                <a class="btn btn-danger" href="{% url 'delete_post' id=post.id %}">Delete Post</a>
-                                <a class="btn" href={% url 'archive' id=post.id%}>Archive Post</a>
-                            </div>
-                            <div style='width: 100%; 
-                            height: 425px; 
-                            border: 1px solid lightgrey;
-                            overflow: scroll;
-                            border-radius: 10px;
-                            box-sizing: border-box;'>
-                            
-                    <div>Comments
-                        <div>
-                            {% if request.user == post.user %}
-                                <a href={% url 'delete_all' post_id=post.id%}>Delete all comments</a>
-                            {% endif %}
-                        </div>
-                    </div>
-                            {% for comment in post.comments.get_queryset %}
-                            <br>
-                                <div style='margin-left: 5px;'>
-                                    <a href={% url 'profilePage' id=comment.author.id %}>{{ comment.author.username }}</a>
-                                        <div>{{ comment.comment }}</div>
-                                        <div style='color: lightgrey;'>{{ comment.time }}</div>
-                                        {% if request.user == post.user or request.user == comment.author %}
-                                            <div><a href={% url 'delete_comment' comment_id=comment.id%}>🗑️</a></div>
-                                        {% endif %}
-                                </div>
-                            {% endfor %}
-                </div>
-                <div style='box-sizing: border-box;
-                    width: 100%;
-                    display: flex;
-                    align-items: center;'
 
+        <!-- Modal/Post Detail -->
+        <div 
+          class="modal fade" 
+          id="exampleModal{{post.id}}" 
+          tabindex="-1" 
+          role="dialog" 
+          aria-labelledby="exampleModalLabel" 
+          aria-hidden="true"
         >
-            <form 
-                action='add_comment/{{ post.id }}' 
-                method='POST'
-                style='width: 100%;'
-            >
-                {% csrf_token %}
-                <input 
-                    placeholder='New Comment'
-                    name='comment'
-                    style='width: 85%;
-                            padding: 5px;
-                            border-radius: 5px;
-                            border: 1px solid lightgrey;'    
-                >
-                <button 
-                    class='btn btn-success'
-                    style='width: 13%;'
-                    type='submit'
-                >
-                    +
-                </button>
-            </form>
-        </div>
+          <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content" >
+              <div class="modal-body" >
+                  <div class="row no-gutters">
 
-                          </div>
-                      </div>
+                    <!-- Picture -->
+                    <div class="col-md-8">
+                      <img  style="background-image: url('{{ post.picture.url }}'); 
+                                    height: 100%; 
+                                    width: 100%; 
+                                    background-size: contain; 
+                                    background-position: center;
+                                    background-repeat: no-repeat;" 
+                            class="card-img"
+                      >
                     </div>
-                    
+
+                    <!-- Details -->
+                    <div class="col-md-4">
+                      <div style='margin-left: 5px;'>
+                        <!-- Display Name & Buttons -->
+                        <div style='height: 30%;'>
+                          <p class="card-title">
+                            <strong>
+                              {{ user.display_name }}
+                            </strong>
+                            <br/>
+                            {{post.caption}}
+                          </p>
+                          {% if request.user == post.user %}
+                          <a 
+                          class="btn btn-danger" 
+                          href="{% url 'delete_post' id=post.id %}"
+                          >
+                            Delete Post
+                          </a>
+                          <a 
+                            class="btn btn-primary" 
+                            href={% url 'archive' id=post.id%}
+                          >
+                            Archive Post
+                          </a>
+                          {% if post.comments.count != 0 %}
+                            <a 
+                              class='btn btn-outline-dark'
+                              href={% url 'delete_all' post_id=post.id %}
+                            >
+                              Delete All Comments
+                            </a>
+                          {% endif %}
+                        {% endif %}
+                      </div>
+                  
+                      <!-- Comments -->
+                      Comments
+                      <div style='width: 100%;
+                                    height: 60%;  
+                                    overflow: scroll;
+                                    box-sizing: border-box;
+                                    border: 1px solid lightgrey;
+                                    border-radius: 10px;'
+                      >
+                        {% for comment in post.comments.get_queryset %}
+                          <br>
+                          <div style='margin-left: 5px;'>
+                            <a 
+                            href={% url 'profilePage' id=comment.author.id %}
+                            >
+                              {{ comment.author.username }}
+                            </a>
+                            <div>
+                              {{ comment.comment }}
+                            </div>
+                            <div style='color: lightgrey;'>
+                            {{ comment.time }}
+                            </div>
+                            {% if request.user == post.user or request.user == comment.author %}
+                              <div>
+                                <a 
+                                  href={% url 'delete_comment' comment_id=comment.id%}
+                                >
+                                  🗑️
+                                </a>
+                              </div>
+                            {% endif %}
+                          </div>
+                        {% endfor %}
+                      </div>
+                      <div style='box-sizing: border-box;
+                                  width: 100%;
+                                  height: 10%;
+                                  display: flex;
+                                  align-items: center;'
+                      >
+                        <form 
+                          action='add_comment/{{ post.id }}' 
+                          method='POST'
+                          style='width: 100%;
+                                  margin-bottom: 0;'
+                        >
+                          {% csrf_token %}
+                          <input 
+                            placeholder='New Comment'
+                            name='comment'
+                            style='width: 85%;
+                                    padding: 5px;
+                                    border-radius: 5px;
+                                    border: 1px solid lightgrey;'    
+                          >
+                          <button 
+                            class='btn btn-success'
+                            style='width: 13%;'
+                            type='submit'
+                          >
+                            +
+                          </button>
+                        </form>
+                      </div>
                     </div>
                   </div>
-                
+                </div>
               </div>
             </div>
+          </div>
+        </div> 
   {% endfor %}
 
 <!-- Optional JavaScript -->
