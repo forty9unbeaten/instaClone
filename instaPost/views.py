@@ -30,6 +30,7 @@ class DiscoverPageView(View):
             posts = posts.exclude(user__in=request.user.following.all())
         return render(request, 'index.html', {'posts': posts})
 
+
 @login_required(login_url='/login/')
 def newpost(request):
     if request.method == 'POST':
@@ -44,11 +45,19 @@ def newpost(request):
     return render(request, 'postUploadForm.html', {'form': form})
 
 
-    
 @login_required(login_url='/login/')
 def like_post(request, post_id):
     if request.method == 'POST':
-        post = Post.objects.get(id=post_id)
+        try:
+            post = Post.objects.get(id=post_id)
+        except:
+            return render(
+                request,
+                'error.html',
+                {
+                    'code': '404'
+                }
+            )
         post.likes.add(request.user)
         return HttpResponseRedirect(reverse('home'))
 
@@ -56,20 +65,47 @@ def like_post(request, post_id):
 @login_required(login_url='/login/')
 def unlike_post(request, post_id):
     if request.method == 'POST':
-        post = Post.objects.get(id=post_id)
+        try:
+            post = Post.objects.get(id=post_id)
+        except:
+            return render(
+                request,
+                'error.html',
+                {
+                    'code': '404'
+                }
+            )
         post.likes.remove(request.user)
         return HttpResponseRedirect(reverse('home'))
 
 
 def delete_post(request, id):
-    post = Post.objects.get(id=id)
+    try:
+        post = Post.objects.get(id=id)
+    except:
+        return render(
+            request,
+            'error.html',
+            {
+                'code': '404'
+            }
+        )
     post.delete()
     return HttpResponseRedirect(reverse('home'))
 
 
 @login_required(login_url='/login/')
 def archive_post(request, id):
-    post = Post.objects.get(id=id)
+    try:
+        post = Post.objects.get(id=id)
+    except:
+        return render(
+            request,
+            'error.html',
+            {
+                'code': '404'
+            }
+        )
     post.archived = True
     post.save()
     return HttpResponseRedirect(reverse('profilePage', args=(post.user.id,)))
@@ -77,7 +113,16 @@ def archive_post(request, id):
 
 @login_required(login_url='/login/')
 def unarchive_post(request, id):
-    post = Post.objects.get(id=id)
+    try:
+        post = Post.objects.get(id=id)
+    except:
+        return render(
+            request,
+            'error.html',
+            {
+                'code': '404'
+            }
+        )
     post.archived = False
     post.save()
     return HttpResponseRedirect(reverse('home'))
@@ -87,6 +132,3 @@ def unarchive_post(request, id):
 def archived_posts(request, id):
     posts = Post.objects.filter(user_id=id).filter(archived=True)
     return render(request, 'index.html', {'posts': posts})
-    
-
-    

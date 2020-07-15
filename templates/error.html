@@ -1,0 +1,16 @@
+{% include 'navbar.html' %}
+<div
+    style="
+        height: 90vh;
+        width: 100vw;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    "
+>
+    <h1>{{ code }} Error</h1>
+    <h2>Oops, this is embarassing...</h2>
+    <h3>We couldn't find that page</h3>
+    <a href={% url 'home' %}>Return Home</a>
+</div>
