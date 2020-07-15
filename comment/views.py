@@ -10,7 +10,16 @@ from comment.models import Comment
 @login_required(login_url='/login/')
 def add_comment(request, post_id):
     if request.method == 'POST':
-        post = Post.objects.get(id=post_id)
+        try:
+            post = Post.objects.get(id=post_id)
+        except:
+            return render(
+                request,
+                'error.html',
+                {
+                    'code': '404'
+                }
+            )
         new_comment = Comment(
             comment=request.POST['comment'],
             author=request.user)
@@ -21,17 +30,32 @@ def add_comment(request, post_id):
 
 @login_required(login_url='/login/')
 def delete_comment(request, comment_id):
-    comment = Comment.objects.get(id=comment_id)
-    user_id = comment.author.id
-    if request.user == comment.author:
-        comment.delete()
-        return HttpResponseRedirect(reverse('home'))
+    try:
+        comment = Comment.objects.get(id=comment_id)
+    except:
+        return render(
+            request,
+            'error.html',
+            {
+                'code': '404'
+            }
+        )
+    comment.delete()
     return HttpResponseRedirect(reverse('home'))
 
 
 @login_required(login_url='/login/')
 def delete_all(request, post_id):
-    post = Post.objects.get(id=post_id)
+    try:
+        post = Post.objects.get(id=post_id)
+    except:
+        return render(
+            request,
+            'error.html',
+            {
+                'code': '404'
+            }
+        )
     user_id = post.user.id
     if request.user == post.user:
         post.comments.get_queryset().delete()

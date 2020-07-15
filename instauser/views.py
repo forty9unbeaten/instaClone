@@ -8,9 +8,19 @@ from authentication.forms import SignupForm
 
 
 def profilePage(request, id):
+    try:
+        user = InstaUser.objects.get(id=id)
+    except:
+        # user can't be found with ID provided in URL
+        return render(
+            request,
+            'error.html',
+            {
+                'code': '404'
+            })
+
     posts = Post.objects.filter(user=id).filter(archived=False)
     countposts = posts.count()
-    user = InstaUser.objects.get(id=id)
     followers = user.following.all()
     countfollowers = followers.count() - 1
     if request.user.is_authenticated:
@@ -40,7 +50,18 @@ def profilePage(request, id):
 
 
 def EditProfile(request, id):
-    user = InstaUser.objects.get(id=id)
+
+    try:
+        user = InstaUser.objects.get(id=id)
+    except:
+        return render(
+            request,
+            'error.html',
+            {
+                'code': '404'
+            }
+        )
+
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
@@ -59,16 +80,34 @@ def EditProfile(request, id):
 
 
 def follow(request, id):
+    try:
+        follow = InstaUser.objects.get(id=id)
+    except:
+        return render(
+            request,
+            'error.html',
+            {
+                'code': '404'
+            }
+        )
     user = request.user
-    follow = InstaUser.objects.get(id=id)
     follow.following.add(user)
     follow.save()
     return HttpResponseRedirect(reverse('profilePage', args={id, }))
 
 
 def unfollow(request, id):
+    try:
+        follow = InstaUser.objects.get(id=id)
+    except:
+        return render(
+            request,
+            'error.html',
+            {
+                'code': '404'
+            }
+        )
     user = request.user
-    follow = InstaUser.objects.get(id=id)
     follow.following.remove(user)
     follow.save()
     return HttpResponseRedirect(reverse('profilePage', args={id, }))
