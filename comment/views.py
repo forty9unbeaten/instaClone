@@ -58,7 +58,6 @@ def delete_all(request, post_id, page):
                 'code': '404'
             }
         )
-    print(request.path)
     user_id = post.user.id
     if request.user == post.user:
         post.comments.get_queryset().delete()
