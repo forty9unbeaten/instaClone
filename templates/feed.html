@@ -91,6 +91,15 @@
                     >
                     {{ comment.time }}
                     </div>
+                    {% if request.user == post.user or request.user == comment.author %}
+                        <div>
+                            <a 
+                                  href={% url 'delete_comment' comment_id=comment.id page='home' user_id=post.user.id %}
+                            >
+                                  🗑️
+                            </a>
+                        </div>
+                    {% endif %}
                 {% endfor %}
             {% endif %}
         </div>
@@ -126,5 +135,15 @@
                 </button>
             </form>
         </div>
+        {% if request.user == post.user %}
+            {% if post.comments.count != 0 %}
+                <a 
+                    class='btn btn-outline-dark'
+                    href={% url 'delete_all' post_id=post.id page='home' %}
+                >
+                    Delete All Comments
+                </a>
+            {% endif %}
+        {% endif %}
     </div>
 {% endfor %}

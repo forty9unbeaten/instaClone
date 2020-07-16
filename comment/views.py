@@ -29,7 +29,7 @@ def add_comment(request, post_id):
 
 
 @login_required(login_url='/login/')
-def delete_comment(request, comment_id):
+def delete_comment(request, comment_id, page, user_id):
     try:
         comment = Comment.objects.get(id=comment_id)
     except:
@@ -41,11 +41,13 @@ def delete_comment(request, comment_id):
             }
         )
     comment.delete()
+    if page == 'profilePage':
+        return HttpResponseRedirect(reverse(page, args=(user_id,)))
     return HttpResponseRedirect(reverse('home'))
 
 
 @login_required(login_url='/login/')
-def delete_all(request, post_id):
+def delete_all(request, post_id, page):
     try:
         post = Post.objects.get(id=post_id)
     except:
@@ -56,8 +58,11 @@ def delete_all(request, post_id):
                 'code': '404'
             }
         )
+    print(request.path)
     user_id = post.user.id
     if request.user == post.user:
         post.comments.get_queryset().delete()
-        return HttpResponseRedirect(reverse('profilePage', args=(user_id,)))
+        if page == 'profilePage':
+            return HttpResponseRedirect(reverse('profilePage', args=(user_id,)))
+        return HttpResponseRedirect(reverse('home'))
     return HttpResponseRedirect(reverse('profilePage', args=(user_id,)))
