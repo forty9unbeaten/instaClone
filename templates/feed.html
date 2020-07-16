@@ -63,6 +63,15 @@
         {% endif %}
         <hr width='350px'>
 
+        <!-- Delete Button -->
+        {% if request.user == post.user %}
+            <a 
+                class="btn btn-danger" 
+                href="{% url 'delete_post' id=post.id page='home' %}"
+            >
+                Delete Post
+            </a>
+        {% endif %}
         
 
         <!-- Comments -->

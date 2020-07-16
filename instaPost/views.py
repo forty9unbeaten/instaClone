@@ -79,7 +79,7 @@ def unlike_post(request, post_id):
         return HttpResponseRedirect(reverse('home'))
 
 
-def delete_post(request, id):
+def delete_post(request, id, page):
     try:
         post = Post.objects.get(id=id)
     except:
@@ -90,7 +90,10 @@ def delete_post(request, id):
                 'code': '404'
             }
         )
+    user_id = post.user.id
     post.delete()
+    if page == 'profilePage':
+        return HttpResponseRedirect(reverse(page, args=(user_id,)))
     return HttpResponseRedirect(reverse('home'))
 
 

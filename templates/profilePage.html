@@ -92,7 +92,7 @@
                           {% if request.user == post.user %}
                           <a 
                           class="btn btn-danger" 
-                          href="{% url 'delete_post' id=post.id %}"
+                          href="{% url 'delete_post' id=post.id page='profilePage' %}"
                           >
                             Delete Post
                           </a>
