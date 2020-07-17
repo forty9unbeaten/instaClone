@@ -46,7 +46,7 @@ def newpost(request):
 
 
 @login_required(login_url='/login/')
-def like_post(request, post_id):
+def like_post(request, post_id, page):
     if request.method == 'POST':
         try:
             post = Post.objects.get(id=post_id)
@@ -59,11 +59,13 @@ def like_post(request, post_id):
                 }
             )
         post.likes.add(request.user)
+        if page == 'profilePage':
+            return HttpResponseRedirect(reverse(page, args=(post.user.id,)))
         return HttpResponseRedirect(reverse('home'))
 
 
 @login_required(login_url='/login/')
-def unlike_post(request, post_id):
+def unlike_post(request, post_id, page):
     if request.method == 'POST':
         try:
             post = Post.objects.get(id=post_id)
@@ -76,6 +78,8 @@ def unlike_post(request, post_id):
                 }
             )
         post.likes.remove(request.user)
+        if page == 'profilePage':
+            return HttpResponseRedirect(reverse(page, args=(post.user.id,)))
         return HttpResponseRedirect(reverse('home'))
 
 
@@ -137,7 +141,7 @@ def archived_posts(request, id):
     return render(request, 'index.html', {'posts': posts})
 
 
-def error_404(request):
+def error_404(request, exception):
     return render(
         request,
         'error.html',
