@@ -80,7 +80,8 @@
                     <!-- Details -->
                     <div class="col-md-4">
                       <div style='margin-left: 5px;'>
-                        <!-- Display Name & Buttons -->
+
+                        <!-- Display Name -->
                         <div>
                           <p class="card-title">
                             <strong>
@@ -89,6 +90,34 @@
                             <br/>
                             {{post.caption}}
                           </p>
+
+                        <!-- Like Button -->
+                        {% if request.user in post.likes.get_queryset %}
+                            <!-- User has liked post -->
+                            <form action={% url 'unlike' post_id=post.id page='profilePage' %} method="POST">
+                                {% csrf_token %}
+                                <button
+                                    type='submit'
+                                    class='btn'
+                                    style='color: red;'
+                                >
+                                    ♥ ({{ post.likes.count }})
+                                </button>
+                            </form>
+                        {% else %}
+                            <!-- User has not liked post -->
+                            <form action={% url 'like' post_id=post.id page='profilePage' %} method='POST'>
+                                {% csrf_token %}
+                                <button 
+                                    type='submit'
+                                    class='btn'
+                                >
+                                    ♥ ({{ post.likes.count }})
+                                </button>
+                            </form>
+                        {% endif %}
+
+                        <!-- Post management Buttons -->
                           {% if request.user == post.user %}
                           <a 
                           class="btn btn-danger" 
@@ -155,7 +184,7 @@
                                   align-items: center;'
                       >
                         <form 
-                          action='add_comment/{{ post.id }}' 
+                          action={% url 'add_comment' post_id=post.id page='profilePage' %}
                           method='POST'
                           style='width: 100%;
                                   margin-bottom: 0;'
