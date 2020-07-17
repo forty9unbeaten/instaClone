@@ -8,7 +8,7 @@ from comment.models import Comment
 
 
 @login_required(login_url='/login/')
-def add_comment(request, post_id):
+def add_comment(request, post_id, page):
     if request.method == 'POST':
         try:
             post = Post.objects.get(id=post_id)
@@ -25,7 +25,9 @@ def add_comment(request, post_id):
             author=request.user)
         new_comment.save()
         post.comments.add(new_comment)
-        return HttpResponseRedirect(reverse('home'))
+        if page == 'profilePage':
+            return HttpResponseRedirect(reverse(page, args=(post.user.id,)))
+        return HttpResponseRedirect(reverse(page))
 
 
 @login_required(login_url='/login/')
