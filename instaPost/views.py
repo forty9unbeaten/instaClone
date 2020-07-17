@@ -135,3 +135,23 @@ def unarchive_post(request, id):
 def archived_posts(request, id):
     posts = Post.objects.filter(user_id=id).filter(archived=True)
     return render(request, 'index.html', {'posts': posts})
+
+
+def error_404(request):
+    return render(
+        request,
+        'error.html',
+        {
+            'code': '404'
+        }
+    )
+
+
+def error_500(request):
+    return render(
+        request,
+        'error.html',
+        {
+            'code': '500'
+        }
+    )
