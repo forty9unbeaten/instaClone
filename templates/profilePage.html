@@ -9,7 +9,8 @@
           <p class="card-text"><small class="text-muted">@{{ user.username }}</small></p>
           <p class="card-text">{{countposts}} Post(s) || {{countfollowers}} Follower(s)</p>
           <p class="card-text">{{ user.bio }}</p>
-          <p class="card-text">{{user.url}}</p>
+          <p class="card-text"><a href={{user.url}}>{{user.url}}</a></p>
+          {% if request.user.is_authenticated %}
           {% if request.user == user %}
           <a class="btn btn-primary" a href="{% url 'edit' id=user.id %}">Edit</a></a>
           {% else%}
@@ -20,6 +21,7 @@
           {% endif %}
           {% endif %}
           <a class="btn btn-primary btn btn-danger" href="{% url 'logout'%}">Logout</a>
+          {% endif %}
       </div>
     </div>
   </div>
