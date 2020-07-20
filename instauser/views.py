@@ -20,35 +20,25 @@ def profilePage(request, id):
             {
                 'code': '404'
             })
-
+    context = {}
+    context['user'] = user
     posts = get_posts_by_user(id).filter(archived=False)
-    countposts = posts.count()
+    context['posts'] = posts
+    context['countposts'] = posts.count()
     followers = user.following.all()
-    countfollowers = followers.count() - 1
+    context['countfollowers'] = followers.count() - 1
     if request.user.is_authenticated:
-        myfollowers = request.user.following.all()
+        context['myfollowers'] = request.user.following.all()
         if request.user in followers:
-            is_following = True
+            context['is_following'] = True
         else:
-            is_following = False
+            context['is_following'] = False
         return render(
             request,
-            'profilePage.html', {
-                'posts': posts,
-                'countposts': countposts,
-                'user': user,
-                'countfollowers': countfollowers,
-                'myfollowers': myfollowers,
-                'is_following': is_following,
-            })
+            'profilePage.html', context)
     return render(
         request,
-        'profilePage.html', {
-            'posts': posts,
-            'countposts': countposts,
-            'user': user,
-            'countfollowers': countfollowers,
-        })
+        'profilePage.html', context)
 
 
 @login_required
