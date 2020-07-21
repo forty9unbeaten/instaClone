@@ -11,4 +11,5 @@ class SignupForm(forms.Form):
     display_name = forms.CharField(max_length=50)
     bio = forms.CharField(max_length=140, widget=forms.Textarea, required=False)
     email = forms.EmailField(max_length=150, required=False)
+    url = forms.URLField(required=False)
     

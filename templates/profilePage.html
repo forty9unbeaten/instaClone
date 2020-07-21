@@ -7,10 +7,25 @@
       <div class="card-body">
           <h5 class="card-title">{{ user.display_name }}</h5>
           <p class="card-text"><small class="text-muted">@{{ user.username }}</small></p>
-          <p class="card-text">{{countposts}} Post(s) || {{countfollowers}} Follower(s)</p>
+          <p class="card-text">
+              {{countposts}} 
+                {% if countposts == 1%}
+                  Post
+                {%else%}
+                  Posts
+                {% endif %} || 
+              {{countfollowers}}
+                {%if countfollowers == 1%}
+                  Follower
+                {% else %}
+                  Followers
+                {% endif %}</p>
           <p class="card-text">{{ user.bio }}</p>
+          <p class="card-text"><a href={{user.url}}>{{user.url}}</a></p>
+          {% if request.user.is_authenticated %}
+          {% if request.user == user %}
           <a class="btn btn-primary" a href="{% url 'edit' id=user.id %}">Edit</a></a>
-          {% if  request.user != user %}
+          {% else%}
           {% if is_following %}
             <a class="btn btn-primary btn btn-danger" href="{% url 'unfollow' id=user.id%}">Unfollow</a>
           {% else %}
@@ -18,6 +33,7 @@
           {% endif %}
           {% endif %}
           <a class="btn btn-primary btn btn-danger" href="{% url 'logout'%}">Logout</a>
+          {% endif %}
       </div>
     </div>
   </div>
