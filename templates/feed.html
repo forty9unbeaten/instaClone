@@ -1,0 +1,158 @@
+{% for post in posts %}
+    <div 
+        style='display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin-top: 10px;
+                padding: 15px;
+                width: 30%;
+                box-shadow: 0 0 5px black;
+                border-radius: 10px;'
+    >
+        <!-- Picture -->
+        <div 
+            style='background-image: url({{ post.picture.url }});
+                    background-size: cover;
+                    background-position: center;
+                    border-radius: 10px;
+                    height: 350px;
+                    width: 350px;'
+        >
+        </div>
+
+        <!-- Username -->
+        <a href={% url 'profilePage' id=post.user.id %}>
+            {{ post.user.username }}
+        </a>
+
+        <!-- Caption -->
+        <div>{{ post.caption }}</div>
+
+        <!-- Like Button -->
+        {% if request.user in post.likes.get_queryset %}
+            <!-- User has liked post -->
+            <form action={% url 'unlike' post_id=post.id page='home' %} method="POST">
+                {% csrf_token %}
+                <button
+                    type='submit'
+                    class='btn'
+                    style='color: red;'
+                >
+                    ♥ ({{ post.likes.count }})
+                </button>
+            </form>
+        {% else %}
+            <!-- User has not liked post -->
+            <form action={% url 'like' post_id=post.id page='home' %} method='POST'>
+                {% csrf_token %}
+                <button 
+                    type='submit'
+                    class='btn'
+                >
+                    ♥ ({{ post.likes.count }})
+                </button>
+            </form>
+        {% endif %}
+        {% if post.archived == True %}
+            <a
+                class='btn'
+                href={% url 'unarchive' id=post.id %}
+            >
+                Unarchive post
+            </a>
+        {% endif %}
+        <hr width='350px'>
+
+        <!-- Delete Button -->
+        {% if request.user == post.user %}
+            <a 
+                class="btn btn-danger" 
+                href="{% url 'delete_post' id=post.id page='home' %}"
+            >
+                Delete Post
+            </a>
+        {% endif %}
+        
+
+        <!-- Comments -->
+        <div
+            style='box-sizing: border-box;
+                    width: 350px;
+                    border: 1px solid lightgrey;
+                    padding: 10px;
+                    border-radius: 10px;
+                    margin-bottom: 5px;'
+        >
+            <div style='color: lightgrey;'>
+                Comments
+            </div>
+            {% if post.comments %}
+                {% for comment in post.comments.get_queryset %}
+                    <div>
+                        <a href={% url 'profilePage' id=comment.author.id %}>
+                            {{ comment.author.username }}
+                        </a>
+                        {{ comment.comment }}
+                    </div>
+                    <div
+                        style='color: lightgrey;
+                                font-size: 14px;'
+                    >
+                    {{ comment.time }}
+                    </div>
+                    {% if request.user == post.user or request.user == comment.author %}
+                        <div>
+                            <a 
+                                  href={% url 'delete_comment' comment_id=comment.id page='home' user_id=post.user.id %}
+                            >
+                                  🗑️
+                            </a>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <!-- New Comment Submission -->
+        <div
+            style='box-sizing: border-box;
+                    width: 350px;
+                    display: flex;
+                    align-items: center;'
+
+        >
+            <form 
+                action='add_comment/{{ post.id }}/home' 
+                method='POST'
+                style='width: 100%;'
+            >
+                {% csrf_token %}
+                <input 
+                    placeholder='New Comment'
+                    name='comment'
+                    style='width: 85%;
+                            padding: 5px;
+                            border-radius: 5px;
+                            border: 1px solid lightgrey;'    
+                >
+                <button 
+                    class='btn btn-success'
+                    style='width: 13%;'
+                    type='submit'
+                >
+                    +
+                </button>
+            </form>
+        </div>
+        {% if request.user == post.user %}
+            {% if post.comments.count != 0 %}
+                <a 
+                    class='btn btn-outline-dark'
+                    href={% url 'delete_all' post_id=post.id page='home' %}
+                >
+                    Delete All Comments
+                </a>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endfor %}

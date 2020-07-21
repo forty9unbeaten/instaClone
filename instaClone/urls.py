@@ -15,7 +15,26 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls.static import static
+from django.conf.urls import handler404, handler500
+from instaClone import settings
+from authentication.urls import urlpatterns as authurls
+from instauser.urls import urlpatterns as userurls
+from instaPost.urls import url_patterns as post_urls
+from comment.urls import url_patterns as comment_urls
+from instaPost.views import error_404, error_500
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 ]
+urlpatterns += authurls
+urlpatterns += userurls
+urlpatterns += post_urls
+urlpatterns += comment_urls
+
+handler404 = error_404
+handler500 = error_500
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)
