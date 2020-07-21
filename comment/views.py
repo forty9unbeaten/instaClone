@@ -7,7 +7,7 @@ from comment.models import Comment
 # Create your views here.
 
 
-@login_required(login_url='/login/')
+@login_required
 def add_comment(request, post_id, page):
     if request.method == 'POST':
         try:
@@ -30,7 +30,7 @@ def add_comment(request, post_id, page):
         return HttpResponseRedirect(reverse(page))
 
 
-@login_required(login_url='/login/')
+@login_required
 def delete_comment(request, comment_id, page, user_id):
     try:
         comment = Comment.objects.get(id=comment_id)
@@ -48,7 +48,7 @@ def delete_comment(request, comment_id, page, user_id):
     return HttpResponseRedirect(reverse('home'))
 
 
-@login_required(login_url='/login/')
+@login_required
 def delete_all(request, post_id, page):
     try:
         post = Post.objects.get(id=post_id)
