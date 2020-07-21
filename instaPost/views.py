@@ -31,7 +31,7 @@ class DiscoverPageView(View):
         return render(request, 'index.html', {'posts': posts})
 
 
-@login_required(login_url='/login/')
+@login_required
 def newpost(request):
     if request.method == 'POST':
         form = NewPostForm(request.POST, request.FILES)
@@ -45,7 +45,7 @@ def newpost(request):
     return render(request, 'postUploadForm.html', {'form': form})
 
 
-@login_required(login_url='/login/')
+@login_required
 def like_post(request, post_id, page):
     if request.method == 'POST':
         try:
@@ -64,7 +64,7 @@ def like_post(request, post_id, page):
         return HttpResponseRedirect(reverse('home'))
 
 
-@login_required(login_url='/login/')
+@login_required
 def unlike_post(request, post_id, page):
     if request.method == 'POST':
         try:
@@ -83,6 +83,7 @@ def unlike_post(request, post_id, page):
         return HttpResponseRedirect(reverse('home'))
 
 
+@login_required
 def delete_post(request, id, page):
     try:
         post = Post.objects.get(id=id)
@@ -101,7 +102,7 @@ def delete_post(request, id, page):
     return HttpResponseRedirect(reverse('home'))
 
 
-@login_required(login_url='/login/')
+@login_required
 def archive_post(request, id):
     try:
         post = Post.objects.get(id=id)
@@ -118,7 +119,7 @@ def archive_post(request, id):
     return HttpResponseRedirect(reverse('profilePage', args=(post.user.id,)))
 
 
-@login_required(login_url='/login/')
+@login_required
 def unarchive_post(request, id):
     try:
         post = Post.objects.get(id=id)
@@ -135,7 +136,7 @@ def unarchive_post(request, id):
     return HttpResponseRedirect(reverse('home'))
 
 
-@login_required(login_url='/login/')
+@login_required
 def archived_posts(request, id):
     posts = Post.objects.filter(user_id=id).filter(archived=True)
     return render(request, 'index.html', {'posts': posts})
